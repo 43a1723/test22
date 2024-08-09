@@ -7,7 +7,7 @@ app = Flask(__name__)
 def check_discord_token(token):
     url = "https://discord.com/api/v10/users/@me"
     headers = {
-        "Authorization": f"Bearer {token}"
+        "Authorization": f"{token}"
     }
     
     response = requests.get(url, headers=headers)
