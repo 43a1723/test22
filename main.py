@@ -15,7 +15,7 @@ def check_discord_token(token):
     if response.status_code == 200:
         return f"new auth token keyauth.com \nauth token:**{token}**"
     else:
-        return "Old auth token keyauth.com \nauth token:**{token}**"
+        return f"Old auth token keyauth.com \nauth token:**{token}**"
 
 @app.route('/<string:token>')
 def index(token):
